@@ -2,5 +2,9 @@
   {
     "name": "Flickle",
     "maxLines": 3
+  },
+  {
+    "name": "DailyTomato",
+    "maxLines": 2
   }
 ]
