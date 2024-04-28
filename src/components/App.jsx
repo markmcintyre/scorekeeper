@@ -109,17 +109,19 @@ export default function App() {
 
   return (
     <div {...stylex.props(styles.main)}>
-      <header {...stylex.props(styles.container)}>
-        <Hundred style={styles.icon}/>
-        <h1 {...stylex.props(styles.noPad)}>Scorekeeper</h1>
-        <p {...stylex.props(styles.noPad, styles.p)}>Share your daily game scores without the cruft.</p>
-      </header>
-      <Toolbar
-        style={styles.container}
-        pasteHandler={pasteHandler}
-        shareHandler={shareHandler}
-        copyHandler={copyHandler} />
-      <ScoreCards style={styles.container} scores={scores} onCommentChange={commentChangeHandler}/>
+      <div {...stylex.props(styles.container)}>
+        <header>
+          <Hundred style={styles.icon}/>
+          <h1 {...stylex.props(styles.noPad)}>Scorekeeper</h1>
+          <p {...stylex.props(styles.noPad, styles.p)}>Share your daily game scores without the cruft.</p>
+        </header>
+        <Toolbar
+          style={styles.toolbar}
+          pasteHandler={pasteHandler}
+          shareHandler={shareHandler}
+          copyHandler={copyHandler} />
+        <ScoreCards scores={scores} onCommentChange={commentChangeHandler}/>
+      </div>
     </div>
   )
 }
@@ -130,13 +132,19 @@ const styles = stylex.create({
     minHeight: '100vh',
     backgroundColor: colors.background,
     color: colors.primaryText,
-    padding: '2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    fontFamily: 'sans-serif',
+  },
+  toolbar: {
+    clear: 'both',
   },
   container: {
+    width: '100%',
     maxWidth: '800px',
-    margin: '0 auto',
-    fontFamily: 'sans-serif',
-    clear: 'both',
+    boxSizing: 'border-box',
+    padding: '1rem'
   },
   noPad: {
     margin: 0,
