@@ -12,6 +12,8 @@ import ScoreEntry from '../classes/score-entry';
  */
 export default function App() {
 
+  const now = Date.now();
+  const [date, setDate] = useState(now - now % 86400000);
   const [scores, setScores] = useState([]);
 
   /** 
@@ -107,20 +109,24 @@ export default function App() {
     }));
   }
 
+  const dateChangeHandler = (newDate) => {
+    setDate(newDate);
+  }
+
   return (
     <div {...stylex.props(styles.main)}>
       <div {...stylex.props(styles.container)}>
         <header>
           <Hundred style={styles.icon}/>
-          <h1 {...stylex.props(styles.noPad)}>Scorekeeper</h1>
+          <h1 {...stylex.props(styles.title, styles.noPad)}>Scorekeeper</h1>
           <p {...stylex.props(styles.noPad, styles.p)}>Share your daily game scores without the cruft.</p>
         </header>
         <Toolbar
           style={styles.toolbar}
           pasteHandler={pasteHandler}
-          shareHandler={shareHandler}
+          shareHandler={navigator.share && shareHandler}
           copyHandler={copyHandler} />
-        <ScoreCards scores={scores} onCommentChange={commentChangeHandler}/>
+        <ScoreCards scores={scores} onCommentChange={commentChangeHandler} date={date} onDateChange={dateChangeHandler}/>
       </div>
     </div>
   )
@@ -159,5 +165,8 @@ const styles = stylex.create({
     fill: 'red',
     float: 'left',
     margin: '.5rem 1rem 2rem 0',
+  },
+  title: {
+    fontWeight: 900,
   }
 });

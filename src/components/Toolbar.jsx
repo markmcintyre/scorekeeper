@@ -21,10 +21,10 @@ export default function Toolbar({style, pasteHandler, shareHandler, copyHandler}
         <Copy style={styles.icon}/>
         Copy Scores
       </button>
-      <button {...stylex.props(styles.button)} onClick={shareHandler}>
+      {shareHandler && <button {...stylex.props(styles.button)} onClick={shareHandler}>
         <Share style={styles.icon}/>
         Share Scores
-      </button>
+      </button>}
     </div>
   );
 }
