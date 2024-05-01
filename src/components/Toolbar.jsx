@@ -17,10 +17,10 @@ export default function Toolbar({style, pasteHandler, shareHandler, copyHandler}
         <Paste style={styles.icon}/>
         Paste Score
       </button>
-      <button {...stylex.props(styles.button)} onClick={copyHandler}>
+      {copyHandler && <button {...stylex.props(styles.button)} onClick={copyHandler}>
         <Copy style={styles.icon}/>
         Copy Scores
-      </button>
+      </button>}
       {shareHandler && <button {...stylex.props(styles.button)} onClick={shareHandler}>
         <Share style={styles.icon}/>
         Share Scores

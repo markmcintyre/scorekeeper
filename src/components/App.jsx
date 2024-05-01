@@ -12,9 +12,10 @@ import ScoreEntry from '../classes/score-entry';
  */
 export default function App() {
 
-  const now = Date.now();
-  const [date, setDate] = useState(now - now % 86400000);
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [scores, setScores] = useState([]);
+
+  console.log(date);
 
   /** 
    * Listen for paste events on the document.
@@ -124,8 +125,8 @@ export default function App() {
         <Toolbar
           style={styles.toolbar}
           pasteHandler={pasteHandler}
-          shareHandler={navigator.share && shareHandler}
-          copyHandler={copyHandler} />
+          shareHandler={navigator.share && scores.length > 0 && shareHandler}
+          copyHandler={scores.length > 0 && copyHandler} />
         <ScoreCards scores={scores} onCommentChange={commentChangeHandler} date={date} onDateChange={dateChangeHandler}/>
       </div>
     </div>

@@ -18,9 +18,12 @@ export default function ScoreCards({style, scores, onCommentChange, date, onDate
     day: 'numeric'
   };
 
+  let localDate = new Date(date);
+  localDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+
   return (
     <div {...stylex.props(style, styles.main)}>
-      <h2 {...stylex.props(styles.dateHeader)}>{new Date(date).toLocaleDateString("en-US", DateOptions)}</h2>
+      <h2 {...stylex.props(styles.dateHeader)}>{new Date(localDate).toLocaleDateString("en-US", DateOptions)}</h2>
       {scores.map((score) => {
         return <ScoreCard key={score.id} score={score} onCommentChange={onCommentChange}/>
       })}
