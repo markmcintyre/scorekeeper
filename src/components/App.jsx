@@ -15,8 +15,6 @@ export default function App() {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [scores, setScores] = useState([]);
 
-  console.log(date);
-
   /** 
    * Listen for paste events on the document.
    */
@@ -49,12 +47,13 @@ export default function App() {
 
     // If we already have this score, return immediately.
     if (scores.find((score) => score.game === scoreEntry.game)) {
-      console.log('Already pasted.');
+      console.log(`Already pasted score for ${scoreEntry.game}.`);
       return;
     }
 
     // Append our new score
     setScores((prevState) => {
+      console.log(`Pasting ${scoreEntry.game}`);
       return [...prevState, scoreEntry]
     });
 

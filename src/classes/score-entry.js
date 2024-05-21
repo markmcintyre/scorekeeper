@@ -7,15 +7,35 @@ const GameTest = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\u
 export default class ScoreEntry {
 
   /**
+   * Constructs a new ScoreEntry from provided string data.
+   * @param {*} initialData - One of two types:
+   *  - A string representing a game score pasted from a daily online game
+   *  - A serialized object from a previously stored ScoreEntry
+   */
+  constructor(initialData) {
+
+    if (typeof initialData === 'string') {
+      this.id = Date.now() + Math.round(Math.random() * 100000000);
+      this.game = this.#extractGameName(initialData);
+      this.rawData = initialData;
+      this.data = this.#sanitize(initialData, knownGames.find((game) => game.name === this.game)?.maxLines);
+      this.comment = '';
+    } else if (typeof initialData === 'object') {
+      const {id, game, rawData, data, comment} = initialData;
+      Object.assign(this, {id, game, rawData, data, comment});
+    }
+    
+  }
+
+  /**
    * Extracts the best guess at the name of this game
    * (i.e. the first word without leading spaces or hash symbols)
    * @param {*} data - Game score data
    * @returns A best guess at a game name.
    */
   #extractGameName(data) {
-    let [firstWord] = data.trim().split(' ');
-    firstWord = firstWord.replace(/^#/, '');
-    return firstWord;
+    const [gameName] = data.match(/^[^\d\W\S]*[\w ]*/);
+    return gameName.trim() || data;
   }
 
   /**
@@ -35,14 +55,12 @@ export default class ScoreEntry {
 
     return lines.reduce((finalResult, line) => {
 
-      // Otherwise trim and strip out URLs and Hash symbols
-      line = line.trim();
+      // Otherwise strip out URLs and Hash symbols
       line = line.replace(/(?:https?):\/\/[\n\S]+/gi, '');
       line = line.replace(/#/g, '');
 
       // If we still have a non-empty line, append it.
       if (line) {
-        this.lineCount++;
         finalResult += finalResult ? '\n' + line : line;
       }
 
@@ -61,25 +79,13 @@ export default class ScoreEntry {
   }
 
   /**
-   * Constructs a new ScoreEntry from provided string data.
-   * @param {*} data - String data representing a game score.
-   */
-  constructor(data) {
-    this.id = Date.now() + Math.round(Math.random() * 100000000);
-    this.game = this.#extractGameName(data);
-    this.rawData = data;
-    this.lineCount = 0;
-    this.data = this.#sanitize(data, knownGames.find((game) => game.name === this.game)?.maxLines);
-    this.comment = '';
-  }
-
-  /**
    * Returns a string representation of this ScoreEntry suitable for sharing.
    * @returns a string
    */
   get sharableData() {
     if (this.comment) {
-      return this.lineCount > 2 ? `${this.data}\n${this.comment}` : `${this.data} — ${this.comment}`;
+      let lineCount = this.data.split('\n').length;
+      return lineCount > 2 ? `${this.data}\n${this.comment}` : `${this.data} — ${this.comment}`;
     } else {
       return this.data;
     }
