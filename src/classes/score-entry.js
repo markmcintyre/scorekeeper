@@ -28,14 +28,16 @@ export default class ScoreEntry {
   }
 
   /**
-   * Extracts the best guess at the name of this game
-   * (i.e. the first word without leading spaces or hash symbols)
+   * Extracts the best guess at the name of this game as a slug
    * @param {*} data - Game score data
    * @returns A best guess at a game name.
    */
   #extractGameName(data) {
-    const [gameName] = data.match(/^[^\d\W\S]*[\w ]*/);
-    return gameName.trim() || data;
+    let [gameName] = data.split('\n');
+    gameName = gameName.toLowerCase();
+    gameName = gameName.replace(/[^a-z\s]/g, '').trim();
+    gameName = gameName.replace(/\s+/g, '-').replace(/-+/g, '-');
+    return gameName || data;
   }
 
   /**
@@ -60,7 +62,7 @@ export default class ScoreEntry {
       line = line.replace(/#/g, '');
 
       // If we still have a non-empty line, append it.
-      if (line) {
+      if (line.trim().length) {
         finalResult += finalResult ? '\n' + line : line;
       }
 

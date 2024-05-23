@@ -1,10 +1,6 @@
 [
   {
-    "name": "Flickle",
+    "name": "flickle",
     "maxLines": 3
-  },
-  {
-    "name": "DailyTomato",
-    "maxLines": 2
   }
 ]
